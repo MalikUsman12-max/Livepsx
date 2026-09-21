@@ -1,0 +1,38 @@
+name: PSX Scan (hourly during market hours)
+
+# Runs automatically once an hour, and also lets you trigger it manually
+# from the Actions tab any time you want a fresh scan right away.
+on:
+  schedule:
+    # Every hour during PSX trading hours (9:30 AM - 3:30 PM Pakistan Time
+    # = 04:30-10:30 UTC), Monday-Friday only. Hourly (not every 30 min)
+    # because a full 500+ stock scan can take up to ~40 minutes - running
+    # it more often risks scans overlapping each other.
+    - cron: '0 4-10 * * 1-5'
+  workflow_dispatch: {}       # adds a manual "Run workflow" button in GitHub
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install psxdata pandas numpy
+
+      - name: Run the PSX scan
+        run: python psx_app.py
+
+      - name: Commit the fresh dashboard back to the repo
+        run: |
+          git config user.name "PSX Auto-Scan Bot"
+          git config user.email "actions@github.com"
+          git add psx_dashboard.html index.html psx_screen_results.csv
+          git diff --quiet --cached || git commit -m "Automated daily scan - $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
