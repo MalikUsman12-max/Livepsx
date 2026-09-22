@@ -70,7 +70,7 @@ CONFIG = {
     # Paste your own Google Apps Script Web App URL here (see psx_proxy.gs)
     # to enable the "Live Refresh" button and auto-refresh in the dashboard.
     # Leave as "" to disable - the button will explain how to set this up.
-    "live_refresh_proxy_url": "https://script.google.com/macros/s/AKfycbwVW0tfsmQxlGWqFFF6anwqSrtRILm4kMUhVIyza1LAusS3Gc-8oBmylGYBdKr428zM/exec",
+    "live_refresh_proxy_url": "https://script.google.com/macros/s/AKfycbypa-MhsGeRI2KfE-tEBct-fTDMsA_Y1ByoJPKyzCBTrgxDq8l6hFhuwK_EScd2omZggQ/exec",
 }
 
 # #############################################################################
