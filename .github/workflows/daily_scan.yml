@@ -23,7 +23,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install psxdata pandas numpy
+        run: pip install "psxdata>=1.1.1" pandas numpy
 
       - name: Run the PSX scan
         run: python psx_app.py
@@ -31,6 +31,10 @@ jobs:
       - name: Commit the fresh dashboard back to the repo
         run: |
           git config user.name "PSX Auto-Scan Bot"
+          git config user.email "actions@github.com"
+          git add psx_dashboard.html index.html
+          git diff --quiet --cached || git commit -m "Scan update - $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
           git config user.email "actions@github.com"
           git add psx_dashboard.html index.html
           git diff --quiet --cached || git commit -m "Scan update - $(date -u +'%Y-%m-%d %H:%M UTC')"
