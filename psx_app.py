@@ -1871,6 +1871,20 @@ if __name__ == "__main__":
     shutil.copy(out_path, "index.html")
     print("Also saved a copy as index.html (for GitHub Pages)")
 
+    # Generate prices.json — a simple symbol->price map that the dashboard
+    # reads to update live prices without any cross-origin fetch.
+    # GitHub Actions commits this to the repo alongside index.html,
+    # so the dashboard reads it from the same domain (no CORS issue ever).
+    price_map = {r["symbol"]: r["price"] for r in market_results if "price" in r}
+    prices_payload = json.dumps({
+        "prices":  price_map,
+        "updated": datetime.now().isoformat(),
+        "count":   len(price_map)
+    }, indent=2)
+    with open("prices.json", "w") as f:
+        f.write(prices_payload)
+    print(f"Also saved prices.json with {len(price_map)} live prices (for dashboard auto-refresh)")
+
     # In a normal environment (your own laptop/Colab), open it automatically.
     # In an automated environment (e.g. GitHub Actions, no browser/display
     # exists) this would crash - skip it there instead of failing the run.
