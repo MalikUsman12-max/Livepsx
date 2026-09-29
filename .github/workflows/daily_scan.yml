@@ -33,7 +33,10 @@ jobs:
         run: |
           git config user.name "PSX Auto-Scan Bot"
           git config user.email "actions@github.com"
+          git add psx_dashboard.html index.html prices.json
+          git stash
           git pull --rebase origin main
+          git stash pop
           git add psx_dashboard.html index.html prices.json
           git diff --quiet --cached || git commit -m "Scan update - $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
