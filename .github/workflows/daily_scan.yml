@@ -2,13 +2,11 @@ name: PSX Scan (hourly during market hours)
 
 on:
   schedule:
-    # Every hour during PSX trading hours (9:30 AM - 3:30 PM PKT = 04:30-10:30 UTC)
-    # Monday-Friday only. Full scan takes up to 40 min, so hourly is the right cadence.
     - cron: '0 4-10 * * 1-5'
-  workflow_dispatch: {}   # manual "Run workflow" button in the Actions tab
+  workflow_dispatch: {}
 
 permissions:
-  contents: write         # needed so the action can push index.html back to the repo
+  contents: write
 
 jobs:
   scan:
@@ -16,6 +14,9 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
